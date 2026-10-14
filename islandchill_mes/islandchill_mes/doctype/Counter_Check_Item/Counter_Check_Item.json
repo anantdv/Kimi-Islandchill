@@ -1,0 +1,95 @@
+{
+ "name": "Counter Check Item",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "reqd": 1,
+   "options": "Item"
+  },
+  {
+   "fieldname": "check_category",
+   "fieldtype": "Select",
+   "label": "Check Category",
+   "reqd": 1,
+   "options": "Flammable Spirit\nHigh-Value Concentrate\nAcidulant\nBulk Liquid\nGas"
+  },
+  {
+   "fieldname": "tolerance_pct",
+   "fieldtype": "Float",
+   "label": "Tolerance Pct",
+   "reqd": 1,
+   "default": "2"
+  },
+  {
+   "fieldname": "photo_required_on",
+   "fieldtype": "Select",
+   "label": "Photo Required On",
+   "reqd": 1,
+   "options": "Receipt\nBOM Release\nBoth"
+  },
+  {
+   "fieldname": "marker_type",
+   "fieldtype": "Select",
+   "label": "Marker Type",
+   "reqd": 1,
+   "options": "Dipstick Bands\nSight Glass\nWeighbridge\nGauge"
+  },
+  {
+   "fieldname": "blocks_next_release",
+   "fieldtype": "Check",
+   "label": "Blocks Next Release",
+   "reqd": 1,
+   "default": "1"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:item"
+}

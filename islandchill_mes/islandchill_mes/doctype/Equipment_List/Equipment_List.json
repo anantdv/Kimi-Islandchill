@@ -1,0 +1,144 @@
+{
+ "name": "Equipment List",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "area",
+   "fieldtype": "Link",
+   "label": "Area",
+   "reqd": 1,
+   "options": "Area"
+  },
+  {
+   "fieldname": "equipments",
+   "fieldtype": "Data",
+   "label": "Equipments",
+   "reqd": 1
+  },
+  {
+   "fieldname": "show_on_app",
+   "fieldtype": "Check",
+   "label": "Show On App",
+   "reqd": 1,
+   "default": "1"
+  },
+  {
+   "fieldname": "filling_line_1",
+   "fieldtype": "Check",
+   "label": "Filling Line 1",
+   "reqd": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "filling_line_2",
+   "fieldtype": "Check",
+   "label": "Filling Line 2",
+   "reqd": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "machine_class",
+   "fieldtype": "Select",
+   "label": "Machine Class",
+   "reqd": 1,
+   "options": "blowing_machine\nfiller\ncapper\nlabeler\ndata_coder\nconveyor\nmixer\nco2_mixer\nwasher\ndepalletizer\npalletiser\ncip_skid\nboiler\nair_compressor\nglycol_chiller\nother"
+  },
+  {
+   "fieldname": "make",
+   "fieldtype": "Data",
+   "label": "Make",
+   "reqd": 0
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "label": "Model",
+   "reqd": 0
+  },
+  {
+   "fieldname": "year_of_manufacture",
+   "fieldtype": "Int",
+   "label": "Year Of Manufacture",
+   "reqd": 0
+  },
+  {
+   "fieldname": "serial_no",
+   "fieldtype": "Data",
+   "label": "Serial No",
+   "reqd": 0
+  },
+  {
+   "fieldname": "install_date",
+   "fieldtype": "Date",
+   "label": "Install Date",
+   "reqd": 0
+  },
+  {
+   "fieldname": "criticality",
+   "fieldtype": "Select",
+   "label": "Criticality",
+   "reqd": 1,
+   "options": "Critical\nHigh\nNormal"
+  },
+  {
+   "fieldname": "asset",
+   "fieldtype": "Link",
+   "label": "Asset",
+   "reqd": 0,
+   "options": "Asset"
+  },
+  {
+   "fieldname": "twin_node_id",
+   "fieldtype": "Data",
+   "label": "Twin Node Id",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:equipments"
+}

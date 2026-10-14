@@ -1,0 +1,140 @@
+{
+ "name": "MES Settings",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "reqd": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "source_warehouse",
+   "fieldtype": "Link",
+   "label": "Source Warehouse",
+   "reqd": 1,
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "wip_warehouse",
+   "fieldtype": "Link",
+   "label": "Wip Warehouse",
+   "reqd": 1,
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "fg_warehouse",
+   "fieldtype": "Link",
+   "label": "Fg Warehouse",
+   "reqd": 1,
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "scrap_warehouse",
+   "fieldtype": "Link",
+   "label": "Scrap Warehouse",
+   "reqd": 0,
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "extra_goods_warehouse",
+   "fieldtype": "Link",
+   "label": "Extra Goods Warehouse",
+   "reqd": 0,
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "gate_mode",
+   "fieldtype": "Select",
+   "label": "Gate Mode",
+   "reqd": 1,
+   "options": "Permissive\nEnforcing"
+  },
+  {
+   "fieldname": "default_gate_blocking",
+   "fieldtype": "Check",
+   "label": "Default Gate Blocking",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "allow_future_work_orders",
+   "fieldtype": "Check",
+   "label": "Allow Future Work Orders",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "wo_naming_series",
+   "fieldtype": "Data",
+   "label": "Wo Naming Series",
+   "reqd": 1
+  },
+  {
+   "fieldname": "qa_naming_series",
+   "fieldtype": "Data",
+   "label": "Qa Naming Series",
+   "reqd": 0
+  },
+  {
+   "fieldname": "performance_aggregation_hour",
+   "fieldtype": "Int",
+   "label": "Performance Aggregation Hour",
+   "reqd": 1,
+   "default": "23"
+  },
+  {
+   "fieldname": "email_report_recipients",
+   "fieldtype": "Small Text",
+   "label": "Email Report Recipients",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "issingle": 1
+}

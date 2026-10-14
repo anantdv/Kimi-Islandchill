@@ -1,0 +1,119 @@
+{
+ "name": "Automation Coverage",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "reading_point",
+   "fieldtype": "Data",
+   "label": "Reading Point",
+   "reqd": 1
+  },
+  {
+   "fieldname": "equipment",
+   "fieldtype": "Link",
+   "label": "Equipment",
+   "reqd": 0,
+   "options": "Equipment List"
+  },
+  {
+   "fieldname": "checklist_item",
+   "fieldtype": "Link",
+   "label": "Checklist Item",
+   "reqd": 0,
+   "options": "Checklist Item"
+  },
+  {
+   "fieldname": "qc_parameter",
+   "fieldtype": "Data",
+   "label": "Qc Parameter",
+   "reqd": 0
+  },
+  {
+   "fieldname": "storage_zone",
+   "fieldtype": "Link",
+   "label": "Storage Zone",
+   "reqd": 0,
+   "options": "MES Warehouse Zone"
+  },
+  {
+   "fieldname": "current_source",
+   "fieldtype": "Select",
+   "label": "Current Source",
+   "reqd": 1,
+   "options": "Manual\nDerived"
+  },
+  {
+   "fieldname": "target_source",
+   "fieldtype": "Select",
+   "label": "Target Source",
+   "reqd": 1,
+   "options": "Manual\nIoT\nVision"
+  },
+  {
+   "fieldname": "target_date",
+   "fieldtype": "Date",
+   "label": "Target Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "effort_hours_saved_monthly",
+   "fieldtype": "Float",
+   "label": "Effort Hours Saved Monthly",
+   "reqd": 0
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "reqd": 1,
+   "options": "Not Started\nPlanned\nIn Progress\nLive"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:reading_point"
+}

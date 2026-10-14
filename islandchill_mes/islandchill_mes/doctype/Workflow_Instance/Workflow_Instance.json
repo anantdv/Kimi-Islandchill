@@ -1,0 +1,106 @@
+{
+ "name": "Workflow Instance",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "workflow",
+   "fieldtype": "Link",
+   "label": "Workflow",
+   "reqd": 1,
+   "options": "MES Workflow Definition"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Data",
+   "label": "Reference Doctype",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Reference Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "reqd": 1,
+   "options": "Pending\nApproved\nRejected\nCancelled"
+  },
+  {
+   "fieldname": "current_step",
+   "fieldtype": "Int",
+   "label": "Current Step",
+   "reqd": 0
+  },
+  {
+   "fieldname": "requester",
+   "fieldtype": "Link",
+   "label": "Requester",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "pending_with",
+   "fieldtype": "Link",
+   "label": "Pending With",
+   "reqd": 0,
+   "options": "User"
+  },
+  {
+   "fieldname": "history",
+   "fieldtype": "Table",
+   "label": "History",
+   "reqd": 0,
+   "options": "Approval History"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "Expression",
+ "autoname": "WF-.YY.MM.-#####"
+}

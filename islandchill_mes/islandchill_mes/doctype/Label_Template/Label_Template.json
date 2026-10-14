@@ -1,0 +1,92 @@
+{
+ "name": "Label Template",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "template_name",
+   "fieldtype": "Data",
+   "label": "Template Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "reqd": 0,
+   "options": "Item"
+  },
+  {
+   "fieldname": "product_family",
+   "fieldtype": "Link",
+   "label": "Product Family",
+   "reqd": 0,
+   "options": "Product Family"
+  },
+  {
+   "fieldname": "field_layout",
+   "fieldtype": "JSON",
+   "label": "Field Layout",
+   "reqd": 1
+  },
+  {
+   "fieldname": "printer",
+   "fieldtype": "Data",
+   "label": "Printer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "reqd": 1,
+   "default": "1"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:template_name"
+}

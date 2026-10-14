@@ -1,0 +1,106 @@
+{
+ "name": "MES Put Away Rule",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "rule_name",
+   "fieldtype": "Data",
+   "label": "Rule Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "reqd": 0,
+   "options": "Item"
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Item Group",
+   "reqd": 0,
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "zone_preferences",
+   "fieldtype": "JSON",
+   "label": "Zone Preferences",
+   "reqd": 1
+  },
+  {
+   "fieldname": "require_temperature_fit",
+   "fieldtype": "Check",
+   "label": "Require Temperature Fit",
+   "reqd": 0,
+   "default": "1"
+  },
+  {
+   "fieldname": "max_stack_layers_override",
+   "fieldtype": "Int",
+   "label": "Max Stack Layers Override",
+   "reqd": 0
+  },
+  {
+   "fieldname": "fefo_pick",
+   "fieldtype": "Check",
+   "label": "Fefo Pick",
+   "reqd": 1,
+   "default": "1"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "reqd": 1,
+   "default": "1"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:rule_name"
+}

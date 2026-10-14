@@ -1,0 +1,101 @@
+{
+ "name": "Receipt Checklist",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "receipt",
+   "fieldtype": "Link",
+   "label": "Receipt",
+   "reqd": 1,
+   "options": "Purchase Receipt"
+  },
+  {
+   "fieldname": "vehicle_condition",
+   "fieldtype": "Select",
+   "label": "Vehicle Condition",
+   "reqd": 1,
+   "options": "OK\nIssue"
+  },
+  {
+   "fieldname": "documents_match",
+   "fieldtype": "Check",
+   "label": "Documents Match",
+   "reqd": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "coa_received",
+   "fieldtype": "Check",
+   "label": "Coa Received",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "temperature_ok",
+   "fieldtype": "Check",
+   "label": "Temperature Ok",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo",
+   "reqd": 0
+  },
+  {
+   "fieldname": "checked_by",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "reqd": 1,
+   "options": "User"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:receipt"
+}

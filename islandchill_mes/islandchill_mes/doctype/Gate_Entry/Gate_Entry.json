@@ -1,0 +1,130 @@
+{
+ "name": "Gate Entry",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "direction",
+   "fieldtype": "Select",
+   "label": "Direction",
+   "reqd": 1,
+   "options": "Inward\nOutward"
+  },
+  {
+   "fieldname": "movement_type",
+   "fieldtype": "Select",
+   "label": "Movement Type",
+   "reqd": 1,
+   "options": "Receipt Vehicle\nDispatch Vehicle\nReturnable Containers\nVisitor\nOther"
+  },
+  {
+   "fieldname": "vehicle_no",
+   "fieldtype": "Data",
+   "label": "Vehicle No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "driver_name",
+   "fieldtype": "Data",
+   "label": "Driver Name",
+   "reqd": 0
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "label": "Transporter",
+   "reqd": 0,
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "linked_doctype",
+   "fieldtype": "Data",
+   "label": "Linked Doctype",
+   "reqd": 0
+  },
+  {
+   "fieldname": "linked_name",
+   "fieldtype": "Data",
+   "label": "Linked Name",
+   "reqd": 0
+  },
+  {
+   "fieldname": "entry_time",
+   "fieldtype": "Datetime",
+   "label": "Entry Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "exit_time",
+   "fieldtype": "Datetime",
+   "label": "Exit Time",
+   "reqd": 0
+  },
+  {
+   "fieldname": "documents_verified",
+   "fieldtype": "Check",
+   "label": "Documents Verified",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo",
+   "reqd": 0
+  },
+  {
+   "fieldname": "gate_officer",
+   "fieldtype": "Link",
+   "label": "Gate Officer",
+   "reqd": 1,
+   "options": "User"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "Expression",
+ "autoname": "GATE-.YY.MM.-#####"
+}

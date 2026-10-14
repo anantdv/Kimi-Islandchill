@@ -1,0 +1,97 @@
+{
+ "name": "Stack Audit",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "zone",
+   "fieldtype": "Link",
+   "label": "Zone",
+   "reqd": 1,
+   "options": "MES Warehouse Zone"
+  },
+  {
+   "fieldname": "shift",
+   "fieldtype": "Link",
+   "label": "Shift",
+   "reqd": 0,
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "audit_time",
+   "fieldtype": "Datetime",
+   "label": "Audit Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "audited_by",
+   "fieldtype": "Link",
+   "label": "Audited By",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo",
+   "reqd": 0
+  },
+  {
+   "fieldname": "violation_found",
+   "fieldtype": "Check",
+   "label": "Violation Found",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

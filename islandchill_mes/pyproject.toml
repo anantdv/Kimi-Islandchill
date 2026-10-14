@@ -1,0 +1,22 @@
+[project]
+name = "islandchill_mes"
+authors = [
+    { name = "Island Chill", email = "dev@islandchill.com.fj" }
+]
+description = "Island Chill Manufacturing Execution System (MES) — custom Frappe app on ERPNext v16"
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+keywords = ["erpnext", "mes", "manufacturing", "beverage"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3.10",
+]
+
+[tool.bench.app]
+islandchill_mes = "islandchill_mes"
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"

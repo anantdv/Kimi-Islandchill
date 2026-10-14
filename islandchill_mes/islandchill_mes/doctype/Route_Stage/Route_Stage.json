@@ -1,0 +1,92 @@
+{
+ "name": "Route Stage",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "stage_name",
+   "fieldtype": "Data",
+   "label": "Stage Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sequence",
+   "fieldtype": "Int",
+   "label": "Sequence",
+   "reqd": 1
+  },
+  {
+   "fieldname": "operation",
+   "fieldtype": "Link",
+   "label": "Operation",
+   "reqd": 0,
+   "options": "Operation"
+  },
+  {
+   "fieldname": "station_equipment_class",
+   "fieldtype": "Select",
+   "label": "Station Equipment Class",
+   "reqd": 0,
+   "options": "blowing_machine\nfiller\ncapper\nlabeler\nconveyor\nmixer\nco2_mixer\npalletiser\nother"
+  },
+  {
+   "fieldname": "requires_checklist",
+   "fieldtype": "Check",
+   "label": "Requires Checklist",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "blocking_default",
+   "fieldtype": "Check",
+   "label": "Blocking Default",
+   "reqd": 0,
+   "default": "0"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "istable": 1
+}

@@ -1,0 +1,124 @@
+{
+ "name": "Container Verification",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "container",
+   "fieldtype": "Link",
+   "label": "Container",
+   "reqd": 1,
+   "options": "Container"
+  },
+  {
+   "fieldname": "trigger_type",
+   "fieldtype": "Select",
+   "label": "Trigger Type",
+   "reqd": 1,
+   "options": "Receipt\nBOM Release"
+  },
+  {
+   "fieldname": "work_order",
+   "fieldtype": "Link",
+   "label": "Work Order",
+   "reqd": 0,
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "stock_entry",
+   "fieldtype": "Link",
+   "label": "Stock Entry",
+   "reqd": 0,
+   "options": "Stock Entry"
+  },
+  {
+   "fieldname": "expected_qty",
+   "fieldtype": "Float",
+   "label": "Expected Qty",
+   "reqd": 1
+  },
+  {
+   "fieldname": "marker_reading",
+   "fieldtype": "Data",
+   "label": "Marker Reading",
+   "reqd": 1
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "variance_qty",
+   "fieldtype": "Float",
+   "label": "Variance Qty",
+   "reqd": 0
+  },
+  {
+   "fieldname": "variance_pct",
+   "fieldtype": "Float",
+   "label": "Variance Pct",
+   "reqd": 0
+  },
+  {
+   "fieldname": "within_tolerance",
+   "fieldtype": "Check",
+   "label": "Within Tolerance",
+   "reqd": 0
+  },
+  {
+   "fieldname": "resolution",
+   "fieldtype": "Select",
+   "label": "Resolution",
+   "reqd": 1,
+   "options": "OK\nSupervisor Override\nIncident Raised"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "Expression",
+ "autoname": "CV-.YY.MM.-#####"
+}

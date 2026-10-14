@@ -1,0 +1,103 @@
+{
+ "name": "Checklist Item",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "item_description",
+   "fieldtype": "Text Editor",
+   "label": "Item Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "expected_condition",
+   "fieldtype": "Data",
+   "label": "Expected Condition",
+   "reqd": 0
+  },
+  {
+   "fieldname": "capture_method",
+   "fieldtype": "Select",
+   "label": "Capture Method",
+   "reqd": 1,
+   "options": "Visual\nGauge Reading\nInstrument Reading"
+  },
+  {
+   "fieldname": "value_min",
+   "fieldtype": "Float",
+   "label": "Value Min",
+   "reqd": 0
+  },
+  {
+   "fieldname": "value_max",
+   "fieldtype": "Float",
+   "label": "Value Max",
+   "reqd": 0
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit",
+   "reqd": 0
+  },
+  {
+   "fieldname": "requires_photo",
+   "fieldtype": "Check",
+   "label": "Requires Photo",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Select",
+   "label": "Source",
+   "reqd": 1,
+   "options": "Manual\nIoT Ready\nIoT Planned"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "istable": 1
+}

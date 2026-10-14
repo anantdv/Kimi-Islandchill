@@ -1,0 +1,109 @@
+{
+ "name": "Checklist Response",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "reqd": 1,
+   "options": "Checklist Item"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Select",
+   "label": "Result",
+   "reqd": 1,
+   "options": "Pass\nFail\nN/A"
+  },
+  {
+   "fieldname": "reading_value",
+   "fieldtype": "Float",
+   "label": "Reading Value",
+   "reqd": 0
+  },
+  {
+   "fieldname": "reading_unit",
+   "fieldtype": "Data",
+   "label": "Reading Unit",
+   "reqd": 0
+  },
+  {
+   "fieldname": "is_within_spec",
+   "fieldtype": "Check",
+   "label": "Is Within Spec",
+   "reqd": 0
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo",
+   "reqd": 0
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Select",
+   "label": "Source",
+   "reqd": 1,
+   "options": "Manual\nDerived\nIoT"
+  },
+  {
+   "fieldname": "device_id",
+   "fieldtype": "Data",
+   "label": "Device Id",
+   "reqd": 0
+  },
+  {
+   "fieldname": "observation",
+   "fieldtype": "Small Text",
+   "label": "Observation",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "istable": 1
+}

@@ -1,0 +1,93 @@
+{
+ "name": "MES Workflow Definition",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "workflow_name",
+   "fieldtype": "Data",
+   "label": "Workflow Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "applies_to",
+   "fieldtype": "Data",
+   "label": "Applies To",
+   "reqd": 1
+  },
+  {
+   "fieldname": "trigger",
+   "fieldtype": "Select",
+   "label": "Trigger",
+   "reqd": 1,
+   "options": "On Submit\nOn Finish\nOn State Change"
+  },
+  {
+   "fieldname": "blocking_mode",
+   "fieldtype": "Select",
+   "label": "Blocking Mode",
+   "reqd": 1,
+   "options": "Blocking\nAdvisory"
+  },
+  {
+   "fieldname": "on_reject",
+   "fieldtype": "Select",
+   "label": "On Reject",
+   "reqd": 1,
+   "options": "Block\nReturn for Edit\nCancel Document"
+  },
+  {
+   "fieldname": "steps",
+   "fieldtype": "Table",
+   "label": "Steps",
+   "reqd": 1,
+   "options": "Workflow Step"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:workflow_name"
+}

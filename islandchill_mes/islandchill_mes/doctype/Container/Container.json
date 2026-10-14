@@ -1,0 +1,118 @@
+{
+ "name": "Container",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "container_no",
+   "fieldtype": "Data",
+   "label": "Container No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "reqd": 1,
+   "options": "Item"
+  },
+  {
+   "fieldname": "capacity",
+   "fieldtype": "Float",
+   "label": "Capacity",
+   "reqd": 1
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "Uom",
+   "reqd": 1,
+   "options": "UOM"
+  },
+  {
+   "fieldname": "zone",
+   "fieldtype": "Link",
+   "label": "Zone",
+   "reqd": 0,
+   "options": "MES Warehouse Zone"
+  },
+  {
+   "fieldname": "bin",
+   "fieldtype": "Data",
+   "label": "Bin",
+   "reqd": 0
+  },
+  {
+   "fieldname": "current_qty",
+   "fieldtype": "Float",
+   "label": "Current Qty",
+   "reqd": 0
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "reqd": 1,
+   "options": "In Storage\nIn Use\nEmpty\nReturned\nQuarantined"
+  },
+  {
+   "fieldname": "marker_calibration",
+   "fieldtype": "JSON",
+   "label": "Marker Calibration",
+   "reqd": 0
+  },
+  {
+   "fieldname": "linked_asset",
+   "fieldtype": "Link",
+   "label": "Linked Asset",
+   "reqd": 0,
+   "options": "Asset"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:container_no"
+}

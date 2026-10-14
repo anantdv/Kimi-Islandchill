@@ -1,0 +1,124 @@
+{
+ "name": "Workflow Step",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "sequence",
+   "fieldtype": "Int",
+   "label": "Sequence",
+   "reqd": 1
+  },
+  {
+   "fieldname": "step_name",
+   "fieldtype": "Data",
+   "label": "Step Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "approver_type",
+   "fieldtype": "Select",
+   "label": "Approver Type",
+   "reqd": 1,
+   "options": "Role\nUser\nSupervisor of Requester\nField on Document"
+  },
+  {
+   "fieldname": "approver_role",
+   "fieldtype": "Link",
+   "label": "Approver Role",
+   "reqd": 0,
+   "options": "Role"
+  },
+  {
+   "fieldname": "approver_user",
+   "fieldtype": "Link",
+   "label": "Approver User",
+   "reqd": 0,
+   "options": "User"
+  },
+  {
+   "fieldname": "approver_field",
+   "fieldtype": "Data",
+   "label": "Approver Field",
+   "reqd": 0
+  },
+  {
+   "fieldname": "condition",
+   "fieldtype": "JSON",
+   "label": "Condition",
+   "reqd": 0
+  },
+  {
+   "fieldname": "required_action",
+   "fieldtype": "Select",
+   "label": "Required Action",
+   "reqd": 1,
+   "options": "Approve\nReview"
+  },
+  {
+   "fieldname": "sla_hours",
+   "fieldtype": "Int",
+   "label": "Sla Hours",
+   "reqd": 0
+  },
+  {
+   "fieldname": "escalation_role",
+   "fieldtype": "Link",
+   "label": "Escalation Role",
+   "reqd": 0,
+   "options": "Role"
+  },
+  {
+   "fieldname": "require_comment_on_reject",
+   "fieldtype": "Check",
+   "label": "Require Comment On Reject",
+   "reqd": 0,
+   "default": "0"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "istable": 1
+}
