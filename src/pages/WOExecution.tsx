@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAppStore } from "@/stores/appStore";
 import { Button } from "@/components/ui/button";
@@ -14,13 +14,47 @@ import {
 } from "lucide-react";
 import { qcForms } from "@/data/mockData";
 import type { WorkOrder, JobCard, QCCheck, Incident, QCForm, MaintenanceCheck, MaintenanceCheckItem } from "@/data/mockData";
+import {
+  getWorkOrderDetail, startWorkOrder, finishWorkOrder, updateJobCard,
+  submitMaintenanceForm,
+  type MaintenanceFormResponseInput,
+} from "@/services/erpnext";
+
+function mapErpJobCardStatus(status?: string): JobCard["status"] {
+  switch (status) {
+    case "Work In Progress":
+      return "in_progress";
+    case "Completed":
+      return "completed";
+    case "Open":
+    default:
+      return "pending";
+  }
+}
+
+function mapProductionLine(line?: string): string {
+  if (line === "Filling Line 1") return "FL1 - Water Line A";
+  if (line === "Filling Line 2") return "FL2 - Water Line B";
+  return line || "";
+}
+
+function mapLineToEquipmentArea(line: string): { equipment: string; area: string } {
+  if (line.includes("Water")) return { equipment: "Water Line", area: "Bottling Line" };
+  if (line.includes("RTD")) return { equipment: "RTD Line", area: "RTD Line" };
+  if (line.includes("CSD")) return { equipment: "CSD Line", area: "CSD / RTD Line" };
+  return { equipment: "Water Line", area: "Bottling Line" };
+}
 
 export default function WOExecution() {
   const { woId } = useParams<{ woId: string }>();
   const navigate = useNavigate();
-  const { workOrders, updateWorkOrder, addIncident, maintenanceChecks, updateMaintenanceCheck, hasPermission } = useAppStore();
+  const { workOrders, updateWorkOrder, addIncident, maintenanceChecks, updateMaintenanceCheck, hasPermission, erpConnection } = useAppStore();
+  const liveMode = erpConnection.connected;
   const canReportIncident = hasPermission("ops-incidents-report");
   const [activeTab, setActiveTab] = useState("overview");
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState("");
+  const [jcCompletedQty, setJcCompletedQty] = useState<Record<string, string>>({});
   const [showFinishModal, setShowFinishModal] = useState(false);
   const [processLoss, setProcessLoss] = useState("0");
   const [extraGoods, setExtraGoods] = useState("0");
@@ -42,25 +76,94 @@ export default function WOExecution() {
   const [maintResolutionNotes, setMaintResolutionNotes] = useState("");
 
   const wo = workOrders.find((w: WorkOrder) => w.id === woId);
+  const maintCheck = wo ? maintenanceChecks.find((mc: MaintenanceCheck) => mc.woId === wo.id) : undefined;
+  const maintCleared = maintCheck?.status === "cleared";
+
+  useEffect(() => {
+    if (!liveMode || !wo) return;
+    setDetailLoading(true);
+    setDetailError("");
+    getWorkOrderDetail(wo.id)
+      .then((detail) => {
+        const mappedJobCards: JobCard[] = detail.job_cards.map((jc) => ({
+          id: jc.name,
+          operation: jc.operation,
+          status: mapErpJobCardStatus(jc.status),
+          operator: undefined,
+          startedAt: undefined,
+          completedAt: undefined,
+          duration: undefined,
+        }));
+        updateWorkOrder(wo.id, {
+          jobCards: mappedJobCards,
+          fillingLine: mapProductionLine(detail.production_line) || wo.fillingLine,
+        });
+      })
+      .catch((err) => setDetailError(err instanceof Error ? err.message : String(err)))
+      .finally(() => setDetailLoading(false));
+  }, [liveMode, wo?.id]);
+
   if (!wo) return (
     <div className="min-h-screen flex items-center justify-center">
       <p className="text-slate-500 dark:text-slate-400">Work Order not found</p>
     </div>
   );
 
-  // Find related maintenance check
-  const maintCheck = maintenanceChecks.find((mc: MaintenanceCheck) => mc.woId === wo.id);
-  const maintCleared = maintCheck?.status === "cleared";
-
   // Available QC forms for this product's stages
   const availableQcForms = qcForms.filter((qf: QCForm) => qf.active);
 
-  const handleLaunch = () => {
+  const handleLaunch = async () => {
     if (!maintCleared) return;
+    if (liveMode) {
+      setDetailLoading(true);
+      try {
+        await startWorkOrder(wo.id);
+        const detail = await getWorkOrderDetail(wo.id);
+        const mappedJobCards: JobCard[] = detail.job_cards.map((jc) => ({
+          id: jc.name,
+          operation: jc.operation,
+          status: mapErpJobCardStatus(jc.status),
+          operator: undefined,
+          startedAt: undefined,
+          completedAt: undefined,
+          duration: undefined,
+        }));
+        updateWorkOrder(wo.id, {
+          status: "in_process",
+          startedAt: new Date().toISOString(),
+          progress: 10,
+          jobCards: mappedJobCards,
+        });
+      } catch (err) {
+        setDetailError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setDetailLoading(false);
+      }
+      return;
+    }
     updateWorkOrder(wo.id, { status: "in_process", startedAt: new Date().toISOString(), progress: 5 });
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
+    if (liveMode) {
+      setDetailLoading(true);
+      try {
+        await finishWorkOrder(wo.id, parseFloat(processLoss) || 0, parseFloat(extraGoods) || 0);
+        updateWorkOrder(wo.id, {
+          status: "completed",
+          completedAt: new Date().toISOString(),
+          progress: 100,
+          processLoss: parseFloat(processLoss) || 0,
+          extraGoods: parseFloat(extraGoods) || 0,
+        });
+        setShowFinishModal(false);
+      } catch (err) {
+        setDetailError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setDetailLoading(false);
+      }
+      return;
+    }
     updateWorkOrder(wo.id, {
       status: "completed",
       completedAt: new Date().toISOString(),
@@ -69,6 +172,100 @@ export default function WOExecution() {
       extraGoods: parseFloat(extraGoods) || 0,
     });
     setShowFinishModal(false);
+  };
+
+  const handleJobCardAction = async (jc: JobCard, action: "start" | "complete") => {
+    if (!liveMode) {
+      if (action === "start") {
+        updateWorkOrder(wo.id, {
+          jobCards: wo.jobCards.map((j) =>
+            j.id === jc.id ? { ...j, status: "in_progress" as const, startedAt: new Date().toISOString() } : j
+          ),
+        });
+      } else {
+        const completedQty = parseFloat(jcCompletedQty[jc.id] || String(jc.duration || wo.qty));
+        updateWorkOrder(wo.id, {
+          jobCards: wo.jobCards.map((j) =>
+            j.id === jc.id
+              ? { ...j, status: "completed" as const, completedAt: new Date().toISOString(), duration: completedQty }
+              : j
+          ),
+        });
+        setJcCompletedQty((prev) => ({ ...prev, [jc.id]: "" }));
+      }
+      return;
+    }
+    setDetailLoading(true);
+    try {
+      const erpStatus = action === "start" ? "Work In Progress" : "Completed";
+      const completedQty = action === "complete" ? parseFloat(jcCompletedQty[jc.id] || String(jc.duration || wo.qty)) : undefined;
+      await updateJobCard(jc.id, erpStatus, completedQty);
+      const detail = await getWorkOrderDetail(wo.id);
+      const mappedJobCards: JobCard[] = detail.job_cards.map((j) => ({
+        id: j.name,
+        operation: j.operation,
+        status: mapErpJobCardStatus(j.status),
+        operator: undefined,
+        startedAt: undefined,
+        completedAt: undefined,
+        duration: undefined,
+      }));
+      updateWorkOrder(wo.id, { jobCards: mappedJobCards });
+      if (action === "complete") {
+        setJcCompletedQty((prev) => ({ ...prev, [jc.id]: "" }));
+      }
+    } catch (err) {
+      setDetailError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setDetailLoading(false);
+    }
+  };
+
+  const handleCertifyMaintenance = async () => {
+    if (!maintCheck || !wo) return;
+    const now = new Date().toISOString();
+    const updatedItems = maintCheck.items.map((item) => ({
+      ...item,
+      status: maintCheckStates[item.id] || item.status,
+      notes: maintItemNotes[item.id] || item.notes,
+      photo: maintCheckPhotos[item.id] || item.photo,
+    }));
+    const localUpdate = {
+      items: updatedItems,
+      status: maintResolution === "resolved" ? ("cleared" as const) : ("pending" as const),
+      clearedAt: maintResolution === "resolved" ? now : undefined,
+      resolutionStatus: maintResolution,
+      pendingReason: maintResolution === "pending" ? maintPendingReason : undefined,
+      resolutionNotes: maintResolution === "resolved" ? maintResolutionNotes : undefined,
+      resolvedAt: now,
+      photos: Object.values(maintCheckPhotos),
+    };
+
+    if (liveMode) {
+      setDetailLoading(true);
+      try {
+        const { equipment, area } = mapLineToEquipmentArea(wo.fillingLine);
+        const responses: MaintenanceFormResponseInput[] = updatedItems.map((item) => ({
+          item: item.check,
+          result: item.status === "pass" ? "Pass" : item.status === "fail" ? "Fail" : "N/A",
+          observation: item.notes,
+        }));
+        await submitMaintenanceForm({
+          work_order: wo.id,
+          equipment,
+          area,
+          overall_remarks: maintResolutionNotes || maintPendingReason,
+          items: responses,
+        });
+      } catch (err) {
+        setDetailError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setDetailLoading(false);
+      }
+    }
+
+    updateMaintenanceCheck(maintCheck.id, localUpdate);
+    setShowMaintModal(false);
   };
 
   const handleRaiseIncident = () => {
@@ -146,6 +343,18 @@ export default function WOExecution() {
         {statusBadge(wo.status)}
       </div>
 
+      {detailError && (
+        <div className="p-3 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-900/20 text-sm text-red-600 dark:text-red-400">
+          {detailError}
+        </div>
+      )}
+
+      {detailLoading && (
+        <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-900/20 text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
+          <Clock className="w-4 h-4 animate-spin" /> Syncing with ERPNext...
+        </div>
+      )}
+
       {/* Maintenance Clearance Banner */}
       {wo.status === "draft" && (
         <Card className={`border ${maintCleared ? "border-emerald-800 bg-emerald-950/20" : "border-amber-800 bg-amber-50 dark:bg-amber-950/20"}`}>
@@ -206,7 +415,7 @@ export default function WOExecution() {
         <Button
           className="w-full h-12 text-base bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleLaunch}
-          disabled={!maintCleared}
+          disabled={!maintCleared || detailLoading}
         >
           {maintCleared ? <><Play className="w-4 h-4 mr-2" /> Launch Work Order</> : <><Lock className="w-4 h-4 mr-2" /> Awaiting Maintenance Clearance</>}
         </Button>
@@ -218,7 +427,7 @@ export default function WOExecution() {
               <AlertTriangle className="w-4 h-4 mr-1 text-amber-600 dark:text-amber-400" /> Raise Incident
             </Button>
           )}
-          <Button className={`h-12 bg-emerald-600 hover:bg-emerald-700 ${canReportIncident ? "flex-1" : "w-full"}`} onClick={() => setShowFinishModal(true)}>
+          <Button className={`h-12 bg-emerald-600 hover:bg-emerald-700 ${canReportIncident ? "flex-1" : "w-full"}`} onClick={() => setShowFinishModal(true)} disabled={detailLoading}>
             <CheckCircle2 className="w-4 h-4 mr-1" /> Finish WO
           </Button>
         </div>
@@ -334,6 +543,30 @@ export default function WOExecution() {
                     </div>
                     {jcStatus(jc.status)}
                   </div>
+                  {wo.status === "in_process" && jc.status !== "completed" && (
+                    <div className="mt-2 flex items-center gap-2">
+                      {jc.status === "pending" ? (
+                        <Button size="sm" className="h-8 text-xs bg-cyan-600 hover:bg-cyan-700" onClick={() => handleJobCardAction(jc, "start")} disabled={detailLoading}>
+                          <Play className="w-3 h-3 mr-1" /> Start
+                        </Button>
+                      ) : (
+                        <>
+                          <Input
+                            type="number"
+                            placeholder={`Qty (${wo.uom})`}
+                            value={jcCompletedQty[jc.id] || ""}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              setJcCompletedQty((prev) => ({ ...prev, [jc.id]: e.target.value }))
+                            }
+                            className="w-28 h-8 text-xs bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-800"
+                          />
+                          <Button size="sm" className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700" onClick={() => handleJobCardAction(jc, "complete")} disabled={detailLoading}>
+                            <CheckCircle2 className="w-3 h-3 mr-1" /> Complete
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  )}
                   {/* Related QC Forms */}
                   {relatedQcForms.length > 0 && (
                     <div className="mt-2 pt-2 border-t border-gray-200 dark:border-slate-800">
@@ -810,26 +1043,8 @@ export default function WOExecution() {
                     {!maintCleared && (
                       <Button
                         className="flex-1 bg-emerald-600 hover:bg-emerald-700"
-                        onClick={() => {
-                          const now = new Date().toISOString();
-                          const updatedItems = maintCheck.items.map((item) => ({
-                            ...item,
-                            status: maintCheckStates[item.id] || item.status,
-                            notes: maintItemNotes[item.id] || item.notes,
-                            photo: maintCheckPhotos[item.id] || item.photo,
-                          }));
-                          updateMaintenanceCheck(maintCheck.id, {
-                            items: updatedItems,
-                            status: maintResolution === "resolved" ? "cleared" : "pending",
-                            clearedAt: maintResolution === "resolved" ? now : undefined,
-                            resolutionStatus: maintResolution,
-                            pendingReason: maintResolution === "pending" ? maintPendingReason : undefined,
-                            resolutionNotes: maintResolution === "resolved" ? maintResolutionNotes : undefined,
-                            resolvedAt: now,
-                            photos: Object.values(maintCheckPhotos),
-                          });
-                          setShowMaintModal(false);
-                        }}
+                        onClick={handleCertifyMaintenance}
+                        disabled={detailLoading}
                       >
                         <ShieldCheck className="w-4 h-4 mr-1" />
                         {maintResolution === "resolved" ? "Certify Clearance" : "Save Pending Status"}

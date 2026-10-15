@@ -70,6 +70,7 @@ interface AppState {
 
   // Data
   addWorkOrder: (wo: WorkOrder) => void;
+  loadWorkOrders: (wos: WorkOrder[]) => void;
   updateWorkOrder: (id: string, updates: Partial<WorkOrder>) => void;
   addIncident: (inc: Incident) => void;
   updateIncident: (id: string, updates: Partial<Incident>) => void;
@@ -179,6 +180,8 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   addWorkOrder: (wo: WorkOrder) =>
     set((state: AppState) => ({ workOrders: [wo, ...state.workOrders] })),
+
+  loadWorkOrders: (wos: WorkOrder[]) => set({ workOrders: wos }),
 
   updateWorkOrder: (id: string, updates: Partial<WorkOrder>) =>
     set((state: AppState) => ({

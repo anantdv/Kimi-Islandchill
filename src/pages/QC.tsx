@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +12,14 @@ import {
 } from "lucide-react";
 import type { QCForm, QCCheck } from "@/data/mockData";
 import { qcForms } from "@/data/mockData";
+import {
+  getMaintenanceForms,
+  getMaintenanceForm,
+  submitMaintenanceForm,
+  type MaintenanceForm,
+  type MaintenanceFormItem,
+  type MaintenanceFormResponseInput,
+} from "@/services/erpnext";
 
 interface CheckWithWO extends QCCheck {
   woName: string;
@@ -21,15 +29,33 @@ interface CheckWithWO extends QCCheck {
 
 export default function QC() {
   const navigate = useNavigate();
-  const { workOrders, hasPermission } = useAppStore();
+  const { workOrders, hasPermission, erpConnection } = useAppStore();
+  const liveMode = erpConnection.connected;
   const [activeTab, setActiveTab] = useState<"checks" | "forms" | "history">("checks");
   const [selectedForm, setSelectedForm] = useState<QCForm | null>(null);
+  const [selectedMaintForm, setSelectedMaintForm] = useState<MaintenanceForm | null>(null);
+  const [maintFormItems, setMaintFormItems] = useState<MaintenanceFormItem[]>([]);
+  const [maintFormResponses, setMaintFormResponses] = useState<Record<string, "Pass" | "Fail" | "N/A">>({});
+  const [maintFormReadings, setMaintFormReadings] = useState<Record<string, string>>({});
+  const [maintForms, setMaintForms] = useState<MaintenanceForm[]>([]);
+  const [maintFormError, setMaintFormError] = useState("");
+  const [maintFormLoading, setMaintFormLoading] = useState(false);
   const [selectedCheck, setSelectedCheck] = useState<CheckWithWO | null>(null);
   const [qcValue, setQcValue] = useState("");
   const [qcDecision, setQcDecision] = useState<"passed" | "failed" | null>(null);
   const [qcNotes, setQcNotes] = useState("");
 
   const canSubmit = hasPermission("ops-qc");
+
+  useEffect(() => {
+    if (!liveMode || activeTab !== "forms") return;
+    setMaintFormLoading(true);
+    setMaintFormError("");
+    getMaintenanceForms()
+      .then(setMaintForms)
+      .catch((err) => setMaintFormError(err instanceof Error ? err.message : String(err)))
+      .finally(() => setMaintFormLoading(false));
+  }, [liveMode, activeTab]);
 
   // Flatten all QC checks from work orders
   const allChecks: CheckWithWO[] = workOrders.flatMap((wo) =>
@@ -57,6 +83,51 @@ export default function QC() {
 
   const submitQcForm = () => {
     setSelectedForm(null);
+  };
+
+  const openMaintForm = async (f: MaintenanceForm) => {
+    setSelectedMaintForm(f);
+    setMaintFormLoading(true);
+    try {
+      const full = await getMaintenanceForm(f.name);
+      setMaintFormItems(full.items || []);
+      setMaintFormResponses({});
+      setMaintFormReadings({});
+    } catch (err) {
+      setMaintFormError(err instanceof Error ? err.message : String(err));
+      setSelectedMaintForm(null);
+    } finally {
+      setMaintFormLoading(false);
+    }
+  };
+
+  const closeMaintForm = () => {
+    setSelectedMaintForm(null);
+    setMaintFormItems([]);
+    setMaintFormResponses({});
+    setMaintFormReadings({});
+  };
+
+  const submitMaintForm = async () => {
+    if (!selectedMaintForm) return;
+    const items: MaintenanceFormResponseInput[] = maintFormItems.map((it) => ({
+      item: it.description,
+      result: maintFormResponses[it.name] || "N/A",
+      reading_value: parseFloat(maintFormReadings[it.name] || "0") || 0,
+      observation: "",
+    }));
+    try {
+      await submitMaintenanceForm({
+        work_order: selectedMaintForm.work_order,
+        equipment: selectedMaintForm.equipment,
+        area: selectedMaintForm.area,
+        overall_remarks: "Submitted from MES QC Forms Library",
+        items,
+      });
+      closeMaintForm();
+    } catch (err) {
+      setMaintFormError(err instanceof Error ? err.message : String(err));
+    }
   };
 
   return (
@@ -148,26 +219,58 @@ export default function QC() {
       {/* Forms Library Tab */}
       {activeTab === "forms" && (
         <div className="space-y-2">
-          {qcForms.filter((f) => f.active).map((form) => (
-            <motion.div key={form.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <Card className="bg-white dark:bg-slate-900/50 border-gray-200 dark:border-slate-800 hover:border-gray-300 dark:hover:border-slate-700 transition-colors cursor-pointer" onClick={() => setSelectedForm(form)}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-cyan-50 dark:bg-cyan-500/15 flex items-center justify-center">
-                        <FileText className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+          {maintFormError && (
+            <div className="p-3 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-900/20 text-sm text-red-600 dark:text-red-400">
+              {maintFormError}
+            </div>
+          )}
+          {maintFormLoading && (
+            <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">Loading forms from ERPNext...</p>
+          )}
+          {liveMode && !maintFormLoading && maintForms.length === 0 && (
+            <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">No maintenance forms found in ERPNext.</p>
+          )}
+          {liveMode
+            ? maintForms.map((f) => (
+                <motion.div key={f.name} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <Card className="bg-white dark:bg-slate-900/50 border-gray-200 dark:border-slate-800 hover:border-gray-300 dark:hover:border-slate-700 transition-colors cursor-pointer" onClick={() => openMaintForm(f)}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-cyan-50 dark:bg-cyan-500/15 flex items-center justify-center">
+                            <FileText className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-slate-800 dark:text-white">{f.equipment}</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400">{f.name} — {f.area} — {f.items.length} items</p>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-800 dark:text-white">{form.title}</p>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400">{form.code} — {form.category} — {form.frequency}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))
+            : qcForms.filter((f) => f.active).map((form) => (
+                <motion.div key={form.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <Card className="bg-white dark:bg-slate-900/50 border-gray-200 dark:border-slate-800 hover:border-gray-300 dark:hover:border-slate-700 transition-colors cursor-pointer" onClick={() => setSelectedForm(form)}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-cyan-50 dark:bg-cyan-500/15 flex items-center justify-center">
+                            <FileText className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-slate-800 dark:text-white">{form.title}</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400">{form.code} — {form.category} — {form.frequency}</p>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                       </div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-slate-400 dark:text-slate-500" />
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
         </div>
       )}
 
@@ -327,6 +430,63 @@ export default function QC() {
               <div className="p-4 border-t border-gray-200 dark:border-slate-800 flex gap-2">
                 <Button variant="outline" className="flex-1 border-gray-200 dark:border-slate-800 text-slate-500 dark:text-slate-400" onClick={() => setSelectedForm(null)}>Cancel</Button>
                 <Button className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white" onClick={submitQcForm}>
+                  <Save className="w-3.5 h-3.5 mr-1" /> Submit Form
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ERPNext Maintenance Form Modal */}
+      <AnimatePresence>
+        {selectedMaintForm && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/40 dark:bg-black/60 z-50 flex items-center justify-center p-4" onClick={closeMaintForm}>
+            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl w-full max-w-lg max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <div className="p-4 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-800 dark:text-white">{selectedMaintForm.equipment}</h3>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">{selectedMaintForm.name} — {selectedMaintForm.area}</p>
+                </div>
+                <button onClick={closeMaintForm} className="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white"><XCircle className="w-5 h-5" /></button>
+              </div>
+              <div className="p-4 space-y-3">
+                {maintFormItems.length === 0 && (
+                  <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">No items in this form.</p>
+                )}
+                {maintFormItems.map((it) => (
+                  <div key={it.name} className="p-3 rounded-lg border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50">
+                    <p className="text-xs font-medium text-slate-800 dark:text-white">{it.description}</p>
+                    <div className="flex gap-2 mt-2">
+                      {(["Pass", "Fail", "N/A"] as const).map((r) => (
+                        <button
+                          key={r}
+                          onClick={() => setMaintFormResponses((prev) => ({ ...prev, [it.name]: r }))}
+                          className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${
+                            maintFormResponses[it.name] === r
+                              ? r === "Pass" ? "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/20" :
+                                r === "Fail" ? "bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400 ring-1 ring-red-500/20" :
+                                "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 ring-1 ring-slate-500/30"
+                              : "bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-gray-200 dark:border-slate-700"
+                          }`}
+                        >
+                          {r}
+                        </button>
+                      ))}
+                    </div>
+                    <Input
+                      type="number"
+                      placeholder="Reading / time (mins)"
+                      value={maintFormReadings[it.name] || ""}
+                      onChange={(e) => setMaintFormReadings((prev) => ({ ...prev, [it.name]: e.target.value }))}
+                      className="mt-2 text-xs bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="p-4 border-t border-gray-200 dark:border-slate-800 flex gap-2">
+                <Button variant="outline" className="flex-1 border-gray-200 dark:border-slate-800 text-slate-500 dark:text-slate-400" onClick={closeMaintForm}>Cancel</Button>
+                <Button className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white" onClick={submitMaintForm} disabled={maintFormLoading}>
                   <Save className="w-3.5 h-3.5 mr-1" /> Submit Form
                 </Button>
               </div>

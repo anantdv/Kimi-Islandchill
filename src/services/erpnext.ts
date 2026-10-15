@@ -1,6 +1,8 @@
 // ERPNext/Frappe integration service for Island Chill MES
 // Ported from the legacy islandchill app frappe.js service
 
+import type { WorkOrder } from "@/data/mockData";
+
 const STORAGE_KEY = "island-mes-erpnext-connection";
 
 export interface ErpnextConnection {
@@ -705,6 +707,37 @@ export interface WorkOrderSummary {
   stock_uom?: string;
   planned_start_date?: string;
   bom_no?: string;
+  production_line?: string;
+}
+
+export interface WorkOrderOperation {
+  name: string;
+  operation: string;
+  status: string;
+  completed_qty: number;
+  planned_qty: number;
+}
+
+export interface JobCardSummary {
+  name: string;
+  operation: string;
+  status: string;
+  for_quantity: number;
+  total_completed_qty?: number;
+}
+
+export interface WorkOrderDetail {
+  name: string;
+  status: string;
+  docstatus: number;
+  production_item: string;
+  item_name?: string;
+  qty: number;
+  stock_uom?: string;
+  bom_no?: string;
+  production_line?: string;
+  operations: WorkOrderOperation[];
+  job_cards: JobCardSummary[];
 }
 
 export async function createWorkOrder(
@@ -732,4 +765,107 @@ export async function getWorkOrders(status?: string, limit = 50): Promise<WorkOr
   const params: Record<string, string> = { limit: String(limit) };
   if (status) params.status = status;
   return callMethod<WorkOrderSummary[]>(conn, "get_work_orders", params, "work_order");
+}
+
+function mapErpStatus(status?: string): WorkOrder["status"] {
+  switch (status) {
+    case "In Process":
+    case "Work In Progress":
+      return "in_process";
+    case "Completed":
+      return "completed";
+    case "Cancelled":
+      return "cancelled";
+    default:
+      return "draft";
+  }
+}
+
+function mapProductionLine(line?: string): string {
+  if (line === "Filling Line 1") return "FL1 - Water Line A";
+  if (line === "Filling Line 2") return "FL2 - Water Line B";
+  return line || "FL1 - Water Line A";
+}
+
+function estimateProgress(status?: string): number {
+  if (status === "Completed") return 100;
+  if (status === "In Process" || status === "Work In Progress") return 10;
+  return 0;
+}
+
+export async function fetchWorkOrders(status?: string, limit = 50): Promise<WorkOrder[]> {
+  const rows = await getWorkOrders(status, limit);
+  return rows.map((r) => ({
+    id: r.name,
+    name: r.name,
+    product: r.item_name || r.production_item,
+    variant: r.production_item,
+    qty: r.qty,
+    uom: r.stock_uom || "Nos",
+    fillingLine: mapProductionLine(r.production_line),
+    status: mapErpStatus(r.status),
+    progress: estimateProgress(r.status),
+    createdAt: r.planned_start_date || new Date().toISOString(),
+    startedAt: r.status === "In Process" || r.status === "Work In Progress" ? r.planned_start_date : undefined,
+    jobCards: [],
+    qcChecks: [],
+    incidents: [],
+    processLoss: 0,
+    extraGoods: 0,
+  }));
+}
+
+export async function getWorkOrderDetail(name: string): Promise<WorkOrderDetail> {
+  const conn = getConnection();
+  if (!conn.isLive || !conn.connected) {
+    throw new Error("Not connected to ERPNext");
+  }
+  return callMethod<WorkOrderDetail>(conn, "get_work_order_detail", { name }, "work_order");
+}
+
+export async function submitWorkOrder(name: string): Promise<{ name: string; status: string }> {
+  const conn = getConnection();
+  if (!conn.isLive || !conn.connected) {
+    throw new Error("Not connected to ERPNext");
+  }
+  return callMethod<{ name: string; status: string }>(conn, "submit_work_order", { name }, "work_order");
+}
+
+export async function startWorkOrder(name: string): Promise<{ name: string; status: string; created_job_cards?: string[] }> {
+  const conn = getConnection();
+  if (!conn.isLive || !conn.connected) {
+    throw new Error("Not connected to ERPNext");
+  }
+  return callMethod<{ name: string; status: string; created_job_cards?: string[] }>(conn, "start_work_order", { name }, "work_order");
+}
+
+export async function updateJobCard(
+  name: string,
+  status: string,
+  completedQty?: number
+): Promise<{ name: string; status: string; total_completed_qty?: number }> {
+  const conn = getConnection();
+  if (!conn.isLive || !conn.connected) {
+    throw new Error("Not connected to ERPNext");
+  }
+  const params: Record<string, string> = { name, status };
+  if (completedQty !== undefined) params.completed_qty = String(completedQty);
+  return callMethod<{ name: string; status: string; total_completed_qty?: number }>(conn, "update_job_card", params, "work_order");
+}
+
+export async function finishWorkOrder(
+  name: string,
+  processLoss?: number,
+  extraGoods?: number,
+  producedQty?: number
+): Promise<{ name: string; status: string; produced_qty?: number }> {
+  const conn = getConnection();
+  if (!conn.isLive || !conn.connected) {
+    throw new Error("Not connected to ERPNext");
+  }
+  const params: Record<string, string> = { name };
+  if (processLoss !== undefined) params.process_loss = String(processLoss);
+  if (extraGoods !== undefined) params.extra_goods = String(extraGoods);
+  if (producedQty !== undefined) params.produced_qty = String(producedQty);
+  return callMethod<{ name: string; status: string; produced_qty?: number }>(conn, "finish_work_order", params, "work_order");
 }

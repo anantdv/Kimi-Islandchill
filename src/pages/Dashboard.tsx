@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/stores/appStore";
+import { fetchWorkOrders } from "@/services/erpnext";
+import { useEffect, useState } from "react";
 import {
   PlusCircle, AlertTriangle, ClipboardCheck,
   Wrench, Clock, TrendingUp, Package, ArrowRight,
@@ -11,7 +13,16 @@ import {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { workOrders, incidents, maintenanceChecks, requisitions, user, hasPermission } = useAppStore();
+  const { workOrders, incidents, maintenanceChecks, requisitions, user, hasPermission, erpConnection, loadWorkOrders } = useAppStore();
+  const [woError, setWoError] = useState("");
+
+  useEffect(() => {
+    if (erpConnection.connected) {
+      fetchWorkOrders()
+        .then(loadWorkOrders)
+        .catch((err) => setWoError(err instanceof Error ? err.message : String(err)));
+    }
+  }, [erpConnection.connected, loadWorkOrders]);
 
   const userRole = user?.role || "";
   const canCreateWO = hasPermission("ops-wo-create");
@@ -394,6 +405,12 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {woError && (
+        <div className="p-3 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-900/20 text-sm text-red-600 dark:text-red-400">
+          {woError}
+        </div>
+      )}
 
       {renderView()}
     </div>

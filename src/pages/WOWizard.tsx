@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import {
   createWorkOrder,
+  fetchWorkOrders,
   getFinishedItems,
   getItemBOMs,
   type FinishedItem,
@@ -24,6 +25,7 @@ const mockFamilies = productFamilies;
 export default function WOWizard() {
   const navigate = useNavigate();
   const addWorkOrder = useAppStore((s: { addWorkOrder: (wo: WorkOrder) => void }) => s.addWorkOrder);
+  const loadWorkOrders = useAppStore((s: { loadWorkOrders: (wos: WorkOrder[]) => void }) => s.loadWorkOrders);
   const workOrderCount = useAppStore((s: { workOrders: WorkOrder[] }) => s.workOrders.length);
   const { erpConnection } = useAppStore();
   const liveMode = erpConnection.connected;
@@ -105,6 +107,7 @@ export default function WOWizard() {
           extraGoods: 0,
         };
         addWorkOrder(newWO);
+        fetchWorkOrders().then(loadWorkOrders).catch(() => {});
         navigate(`/workorders/${newWO.id}`);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
