@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "framework": "vite",
+  "buildCommand": "npx vite build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/api/method/upload_file",
+      "destination": "/api/proxy?__path=/api/method/upload_file"
+    },
+    {
+      "source": "/api/method/(.*)",
+      "destination": "/api/proxy?__path=/api/method/$1"
+    },
+    {
+      "source": "/api/resource/(.*)",
+      "destination": "/api/proxy?__path=/api/resource/$1"
+    },
+    {
+      "source": "/logout",
+      "destination": "/api/proxy?__path=/logout"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
