@@ -1,0 +1,116 @@
+{
+ "name": "Performance Event",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "event_type",
+   "fieldtype": "Data",
+   "label": "Event Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "work_order",
+   "fieldtype": "Link",
+   "label": "Work Order",
+   "reqd": 0,
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "job_card",
+   "fieldtype": "Link",
+   "label": "Job Card",
+   "reqd": 0,
+   "options": "Job Card"
+  },
+  {
+   "fieldname": "equipment",
+   "fieldtype": "Link",
+   "label": "Equipment",
+   "reqd": 0,
+   "options": "Equipment List"
+  },
+  {
+   "fieldname": "filling_line",
+   "fieldtype": "Link",
+   "label": "Filling Line",
+   "reqd": 0,
+   "options": "Filling Line"
+  },
+  {
+   "fieldname": "qty_good",
+   "fieldtype": "Float",
+   "label": "Qty Good",
+   "reqd": 0
+  },
+  {
+   "fieldname": "qty_extra",
+   "fieldtype": "Float",
+   "label": "Qty Extra",
+   "reqd": 0
+  },
+  {
+   "fieldname": "qty_loss",
+   "fieldtype": "Float",
+   "label": "Qty Loss",
+   "reqd": 0
+  },
+  {
+   "fieldname": "timestamp",
+   "fieldtype": "Datetime",
+   "label": "Timestamp",
+   "reqd": 1
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

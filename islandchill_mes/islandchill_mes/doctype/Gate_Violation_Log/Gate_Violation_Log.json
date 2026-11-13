@@ -1,0 +1,97 @@
+{
+ "name": "Gate Violation Log",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "fieldtype": "Link",
+   "label": "Work Order",
+   "reqd": 1,
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "stage",
+   "fieldtype": "Data",
+   "label": "Stage",
+   "reqd": 1
+  },
+  {
+   "fieldname": "gate_mode",
+   "fieldtype": "Select",
+   "label": "Gate Mode",
+   "reqd": 1,
+   "options": "Permissive\nEnforcing"
+  },
+  {
+   "fieldname": "violations",
+   "fieldtype": "JSON",
+   "label": "Violations",
+   "reqd": 1
+  },
+  {
+   "fieldname": "acted_by",
+   "fieldtype": "Link",
+   "label": "Acted By",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "action",
+   "fieldtype": "Select",
+   "label": "Action",
+   "reqd": 1,
+   "options": "Allowed\nBlocked"
+  },
+  {
+   "fieldname": "timestamp",
+   "fieldtype": "Datetime",
+   "label": "Timestamp",
+   "reqd": 1
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

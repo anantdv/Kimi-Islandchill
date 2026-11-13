@@ -1,0 +1,151 @@
+{
+ "name": "QC Sampling Plan",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "plan_name",
+   "fieldtype": "Data",
+   "label": "Plan Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "product_family",
+   "fieldtype": "Link",
+   "label": "Product Family",
+   "reqd": 1,
+   "options": "Product Family"
+  },
+  {
+   "fieldname": "filling_line",
+   "fieldtype": "Link",
+   "label": "Filling Line",
+   "reqd": 0,
+   "options": "Filling Line"
+  },
+  {
+   "fieldname": "route_stage",
+   "fieldtype": "Link",
+   "label": "Route Stage",
+   "reqd": 0,
+   "options": "Route Stage"
+  },
+  {
+   "fieldname": "parameter",
+   "fieldtype": "Data",
+   "label": "Parameter",
+   "reqd": 1
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Link",
+   "label": "Unit",
+   "reqd": 0,
+   "options": "UOM"
+  },
+  {
+   "fieldname": "spec_min",
+   "fieldtype": "Float",
+   "label": "Spec Min",
+   "reqd": 0
+  },
+  {
+   "fieldname": "spec_max",
+   "fieldtype": "Float",
+   "label": "Spec Max",
+   "reqd": 0
+  },
+  {
+   "fieldname": "control_min",
+   "fieldtype": "Float",
+   "label": "Control Min",
+   "reqd": 0
+  },
+  {
+   "fieldname": "control_max",
+   "fieldtype": "Float",
+   "label": "Control Max",
+   "reqd": 0
+  },
+  {
+   "fieldname": "frequency_type",
+   "fieldtype": "Select",
+   "label": "Frequency Type",
+   "reqd": 1,
+   "options": "Per Units\nEvery Minutes\nPer Batch"
+  },
+  {
+   "fieldname": "frequency_value",
+   "fieldtype": "Int",
+   "label": "Frequency Value",
+   "reqd": 1
+  },
+  {
+   "fieldname": "responsible_role",
+   "fieldtype": "Link",
+   "label": "Responsible Role",
+   "reqd": 1,
+   "options": "Role"
+  },
+  {
+   "fieldname": "linked_form",
+   "fieldtype": "Link",
+   "label": "Linked Form",
+   "reqd": 0,
+   "options": "MES Form Registration"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "reqd": 1,
+   "default": "1"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:plan_name"
+}

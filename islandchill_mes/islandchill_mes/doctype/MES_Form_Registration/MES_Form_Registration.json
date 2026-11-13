@@ -1,0 +1,107 @@
+{
+ "name": "MES Form Registration",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "form_type",
+   "fieldtype": "Data",
+   "label": "Form Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "form_label",
+   "fieldtype": "Data",
+   "label": "Form Label",
+   "reqd": 1
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category",
+   "reqd": 1,
+   "options": "Laboratory\nCleaning\nSafety\nQuality\nIncident"
+  },
+  {
+   "fieldname": "blocking",
+   "fieldtype": "Check",
+   "label": "Blocking",
+   "reqd": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "required_stage",
+   "fieldtype": "Select",
+   "label": "Required Stage",
+   "reqd": 1,
+   "options": "Pre-Start\nPre-Finish\nOn-Demand"
+  },
+  {
+   "fieldname": "scope",
+   "fieldtype": "Select",
+   "label": "Scope",
+   "reqd": 1,
+   "options": "Work Order\nBatch\nShift"
+  },
+  {
+   "fieldname": "applies_to_lines",
+   "fieldtype": "Table MultiSelect",
+   "label": "Applies To Lines",
+   "reqd": 0,
+   "options": "Filling Line"
+  },
+  {
+   "fieldname": "applies_to_families",
+   "fieldtype": "Table MultiSelect",
+   "label": "Applies To Families",
+   "reqd": 0,
+   "options": "Product Family"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:form_label"
+}

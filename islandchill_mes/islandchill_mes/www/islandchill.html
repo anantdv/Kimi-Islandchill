@@ -1,0 +1,9 @@
+{% extends "templates/web.html" %}
+{% block page_content %}
+<div id="root">Loading Island Chill MES…</div>
+<script>
+  window.csrf_token = "{{ frappe.session.csrf_token }}";
+</script>
+<script type="module" src="/assets/islandchill_mes/frontend/assets/index.js"></script>
+<link rel="stylesheet" href="/assets/islandchill_mes/frontend/assets/index.css">
+{% endblock %}

@@ -1,0 +1,98 @@
+{
+ "name": "MES Dashboard Widget",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "widget_title",
+   "fieldtype": "Data",
+   "label": "Widget Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "widget_type",
+   "fieldtype": "Select",
+   "label": "Widget Type",
+   "reqd": 1,
+   "options": "KPI\nChart\nTable\nQueue\nCustom"
+  },
+  {
+   "fieldname": "data_source",
+   "fieldtype": "Select",
+   "label": "Data Source",
+   "reqd": 1,
+   "options": "state_engine\nwo_pipeline\ncompliance\nqc\nperformance\nwastage\nautomation_coverage\nwarehouse\nstorage\ncontainers\ngate"
+  },
+  {
+   "fieldname": "filters_config",
+   "fieldtype": "JSON",
+   "label": "Filters Config",
+   "reqd": 0
+  },
+  {
+   "fieldname": "visualization_config",
+   "fieldtype": "JSON",
+   "label": "Visualization Config",
+   "reqd": 0
+  },
+  {
+   "fieldname": "role_visibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Role Visibility",
+   "reqd": 0,
+   "options": "Role"
+  },
+  {
+   "fieldname": "layout_position",
+   "fieldtype": "JSON",
+   "label": "Layout Position",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:widget_title"
+}

@@ -1,0 +1,138 @@
+{
+ "name": "MES Warehouse Zone",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "reqd": 1,
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "zone_code",
+   "fieldtype": "Data",
+   "label": "Zone Code",
+   "reqd": 1
+  },
+  {
+   "fieldname": "zone_type",
+   "fieldtype": "Select",
+   "label": "Zone Type",
+   "reqd": 1,
+   "options": "Raw Material\nFlammable\nRM Concentrates\nRM Liquids\nDry RM\nGas Store\nPackaging\nWIP\nFG Temp-Controlled\nFG Ambient\nQuarantine\nDispatch Staging\nExtra Goods\nTank Bulk"
+  },
+  {
+   "fieldname": "temperature_min",
+   "fieldtype": "Float",
+   "label": "Temperature Min",
+   "reqd": 0
+  },
+  {
+   "fieldname": "temperature_max",
+   "fieldtype": "Float",
+   "label": "Temperature Max",
+   "reqd": 0
+  },
+  {
+   "fieldname": "humidity_max",
+   "fieldtype": "Float",
+   "label": "Humidity Max",
+   "reqd": 0
+  },
+  {
+   "fieldname": "capacity_pallets",
+   "fieldtype": "Int",
+   "label": "Capacity Pallets",
+   "reqd": 0
+  },
+  {
+   "fieldname": "max_stack_layers",
+   "fieldtype": "Int",
+   "label": "Max Stack Layers",
+   "reqd": 1,
+   "default": "5"
+  },
+  {
+   "fieldname": "restricted",
+   "fieldtype": "Check",
+   "label": "Restricted",
+   "reqd": 0,
+   "default": "0"
+  },
+  {
+   "fieldname": "allowed_item_groups",
+   "fieldtype": "Table MultiSelect",
+   "label": "Allowed Item Groups",
+   "reqd": 0,
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "allowed_items",
+   "fieldtype": "Table MultiSelect",
+   "label": "Allowed Items",
+   "reqd": 0,
+   "options": "Item"
+  },
+  {
+   "fieldname": "bin_scheme",
+   "fieldtype": "Select",
+   "label": "Bin Scheme",
+   "reqd": 1,
+   "options": "None\nRack-Row-Level"
+  },
+  {
+   "fieldname": "location_label_prefix",
+   "fieldtype": "Data",
+   "label": "Location Label Prefix",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "By fieldname",
+ "autoname": "field:zone_code"
+}

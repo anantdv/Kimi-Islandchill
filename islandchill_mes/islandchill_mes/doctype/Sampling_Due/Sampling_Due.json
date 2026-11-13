@@ -1,0 +1,115 @@
+{
+ "name": "Sampling Due",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "fieldtype": "Link",
+   "label": "Work Order",
+   "reqd": 1,
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "batch_no",
+   "fieldtype": "Data",
+   "label": "Batch No",
+   "reqd": 0
+  },
+  {
+   "fieldname": "filling_line",
+   "fieldtype": "Link",
+   "label": "Filling Line",
+   "reqd": 1,
+   "options": "Filling Line"
+  },
+  {
+   "fieldname": "parameter",
+   "fieldtype": "Data",
+   "label": "Parameter",
+   "reqd": 1
+  },
+  {
+   "fieldname": "due_time",
+   "fieldtype": "Datetime",
+   "label": "Due Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "reqd": 1,
+   "options": "Pending\nCompleted\nOverdue\nSkipped"
+  },
+  {
+   "fieldname": "completed_reference_type",
+   "fieldtype": "Data",
+   "label": "Completed Reference Type",
+   "reqd": 0
+  },
+  {
+   "fieldname": "completed_reference_name",
+   "fieldtype": "Data",
+   "label": "Completed Reference Name",
+   "reqd": 0
+  },
+  {
+   "fieldname": "fulfilled_by",
+   "fieldtype": "Link",
+   "label": "Fulfilled By",
+   "reqd": 0,
+   "options": "User"
+  },
+  {
+   "fieldname": "fulfilled_time",
+   "fieldtype": "Datetime",
+   "label": "Fulfilled Time",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

@@ -1,0 +1,192 @@
+{
+ "name": "Line Incident",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "fieldtype": "Link",
+   "label": "Work Order",
+   "reqd": 0,
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "filling_line",
+   "fieldtype": "Link",
+   "label": "Filling Line",
+   "reqd": 1,
+   "options": "Filling Line"
+  },
+  {
+   "fieldname": "equipment",
+   "fieldtype": "Link",
+   "label": "Equipment",
+   "reqd": 0,
+   "options": "Equipment List"
+  },
+  {
+   "fieldname": "incident_type",
+   "fieldtype": "Select",
+   "label": "Incident Type",
+   "reqd": 1,
+   "options": "Breakdown\nJam\nParameter Deviation\nQuality Fault\nMaterial Shortage\nSafety\nStorage Fault\nOther"
+  },
+  {
+   "fieldname": "severity",
+   "fieldtype": "Select",
+   "label": "Severity",
+   "reqd": 1,
+   "options": "Critical\nHigh\nMedium\nLow"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "reqd": 1,
+   "options": "Raised\nAcknowledged\nIn Progress\nResolved\nClosed"
+  },
+  {
+   "fieldname": "raised_by",
+   "fieldtype": "Link",
+   "label": "Raised By",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "raised_time",
+   "fieldtype": "Datetime",
+   "label": "Raised Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo",
+   "reqd": 0
+  },
+  {
+   "fieldname": "acknowledged_by",
+   "fieldtype": "Link",
+   "label": "Acknowledged By",
+   "reqd": 0,
+   "options": "User"
+  },
+  {
+   "fieldname": "acknowledged_time",
+   "fieldtype": "Datetime",
+   "label": "Acknowledged Time",
+   "reqd": 0
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "reqd": 0,
+   "options": "User"
+  },
+  {
+   "fieldname": "resolved_by",
+   "fieldtype": "Link",
+   "label": "Resolved By",
+   "reqd": 0,
+   "options": "User"
+  },
+  {
+   "fieldname": "resolved_time",
+   "fieldtype": "Datetime",
+   "label": "Resolved Time",
+   "reqd": 0
+  },
+  {
+   "fieldname": "downtime_minutes",
+   "fieldtype": "Int",
+   "label": "Downtime Minutes",
+   "reqd": 0
+  },
+  {
+   "fieldname": "wastage_qty",
+   "fieldtype": "Float",
+   "label": "Wastage Qty",
+   "reqd": 0
+  },
+  {
+   "fieldname": "wastage_uom",
+   "fieldtype": "Link",
+   "label": "Wastage Uom",
+   "reqd": 0,
+   "options": "UOM"
+  },
+  {
+   "fieldname": "wastage_reason",
+   "fieldtype": "Link",
+   "label": "Wastage Reason",
+   "reqd": 0,
+   "options": "Wastage Reason"
+  },
+  {
+   "fieldname": "root_cause",
+   "fieldtype": "Small Text",
+   "label": "Root Cause",
+   "reqd": 0
+  },
+  {
+   "fieldname": "corrective_actions",
+   "fieldtype": "Table",
+   "label": "Corrective Actions",
+   "reqd": 0,
+   "options": "Corrective Action"
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "naming_rule": "Expression",
+ "autoname": "INC-.YY.MM.-#####"
+}

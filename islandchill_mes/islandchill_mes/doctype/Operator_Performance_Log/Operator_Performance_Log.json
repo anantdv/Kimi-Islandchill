@@ -1,0 +1,168 @@
+{
+ "name": "Operator Performance Log",
+ "module": "Island Chill MES",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "log_date",
+   "fieldtype": "Date",
+   "label": "Log Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "filling_line",
+   "fieldtype": "Link",
+   "label": "Filling Line",
+   "reqd": 0,
+   "options": "Filling Line"
+  },
+  {
+   "fieldname": "zone",
+   "fieldtype": "Link",
+   "label": "Zone",
+   "reqd": 0,
+   "options": "MES Warehouse Zone"
+  },
+  {
+   "fieldname": "shift_hours",
+   "fieldtype": "Float",
+   "label": "Shift Hours",
+   "reqd": 0
+  },
+  {
+   "fieldname": "machine_hours",
+   "fieldtype": "Float",
+   "label": "Machine Hours",
+   "reqd": 0
+  },
+  {
+   "fieldname": "units_good",
+   "fieldtype": "Float",
+   "label": "Units Good",
+   "reqd": 0
+  },
+  {
+   "fieldname": "units_extra",
+   "fieldtype": "Float",
+   "label": "Units Extra",
+   "reqd": 0
+  },
+  {
+   "fieldname": "units_loss",
+   "fieldtype": "Float",
+   "label": "Units Loss",
+   "reqd": 0
+  },
+  {
+   "fieldname": "throughput_uph",
+   "fieldtype": "Float",
+   "label": "Throughput Uph",
+   "reqd": 0
+  },
+  {
+   "fieldname": "good_qty_ratio",
+   "fieldtype": "Float",
+   "label": "Good Qty Ratio",
+   "reqd": 0
+  },
+  {
+   "fieldname": "loss_rate",
+   "fieldtype": "Float",
+   "label": "Loss Rate",
+   "reqd": 0
+  },
+  {
+   "fieldname": "checklist_compliance",
+   "fieldtype": "Float",
+   "label": "Checklist Compliance",
+   "reqd": 0
+  },
+  {
+   "fieldname": "qc_fulfillments",
+   "fieldtype": "Int",
+   "label": "Qc Fulfillments",
+   "reqd": 0
+  },
+  {
+   "fieldname": "overdue_qc",
+   "fieldtype": "Int",
+   "label": "Overdue Qc",
+   "reqd": 0
+  },
+  {
+   "fieldname": "incidents_raised",
+   "fieldtype": "Int",
+   "label": "Incidents Raised",
+   "reqd": 0
+  },
+  {
+   "fieldname": "incidents_resolved",
+   "fieldtype": "Int",
+   "label": "Incidents Resolved",
+   "reqd": 0
+  },
+  {
+   "fieldname": "avg_ack_seconds",
+   "fieldtype": "Int",
+   "label": "Avg Ack Seconds",
+   "reqd": 0
+  },
+  {
+   "fieldname": "warehouse_compliance",
+   "fieldtype": "Float",
+   "label": "Warehouse Compliance",
+   "reqd": 0
+  }
+ ],
+ "modified_by": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "MES Warehouse",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES QC",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "MES Gate",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
